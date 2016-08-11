@@ -52,7 +52,32 @@ public class MainActivity extends AppCompatActivity {
                 .url("https://api.twitter.com/oauth2/token")
                 .build();
 
-        client.newCall(apiRequest).enqueue(new Callback() {
+//        client.newCall(apiRequest).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.i(TAG, "fail");
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (!response.isSuccessful()) {
+//                    //cry
+//                } else {
+//                    Log.i(TAG, "Response: " + response.body().string());
+//                }
+//            }
+//        });
+        //////////////////////////////
+        RequestBody requestBody1 = new FormBody.Builder().build();
+
+        Request apiRequest2 = new Request.Builder()
+                .addHeader("Authorization", "Bearer " +
+                        "AAAAAAAAAAAAAAAAAAAAAPjFuAAAAAAAw4DhWE0PW1fC%2FNu9IqlACrmkceQ%3DAfrebWvQJeZg6ttJrEEMWod9Wa7qGSyTM05dsFzae39UE5W4ZW")
+                .url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
+                //.get(requestBody1)
+                .build();//
+
+        client.newCall(apiRequest2).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, "fail");
@@ -63,10 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     //cry
                 } else {
-                    Log.i(TAG, "Response: " + response.body().string());
+                    Log.i(TAG, "?????????: " + response.body().string());
                 }
             }
         });
+
 
     }
 
