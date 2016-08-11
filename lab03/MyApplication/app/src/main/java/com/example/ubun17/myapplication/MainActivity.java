@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         Request apiRequest2 = new Request.Builder()
                 .addHeader("Authorization", "Bearer " +
                         "AAAAAAAAAAAAAAAAAAAAAPjFuAAAAAAAw4DhWE0PW1fC%2FNu9IqlACrmkceQ%3DAfrebWvQJeZg6ttJrEEMWod9Wa7qGSyTM05dsFzae39UE5W4ZW")
-                .url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
+                .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton")
                 //.get(requestBody1)
                 .build();//
 
