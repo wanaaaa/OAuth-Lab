@@ -76,9 +76,14 @@ public class MainActivity extends AppCompatActivity {
         Request apiRequest2 = new Request.Builder()
                 .addHeader("Authorization", "Bearer " +
                         "AAAAAAAAAAAAAAAAAAAAAPjFuAAAAAAAw4DhWE0PW1fC%2FNu9IqlACrmkceQ%3DAfrebWvQJeZg6ttJrEEMWod9Wa7qGSyTM05dsFzae39UE5W4ZW")
+<<<<<<< HEAD:lab04/MyApplication/app/src/main/java/com/example/ubun17/myapplication/MainActivity.java
                 //.url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
                 .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton&count=1")
                 //.post(requestBody1)
+=======
+                .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton")
+                //.get(requestBody1)
+>>>>>>> d5c8a263ed2710d6355af4e64a7b81617d5b10a7:lab03/MyApplication/app/src/main/java/com/example/ubun17/myapplication/MainActivity.java
                 .build();//
 //
         client.newCall(apiRequest2).enqueue(new Callback() {
