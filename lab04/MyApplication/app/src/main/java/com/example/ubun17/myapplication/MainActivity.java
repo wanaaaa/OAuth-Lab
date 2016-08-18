@@ -8,7 +8,10 @@ import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -52,31 +55,32 @@ public class MainActivity extends AppCompatActivity {
                 .url("https://api.twitter.com/oauth2/token")
                 .build();
 
-//        client.newCall(apiRequest).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                Log.i(TAG, "fail");
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (!response.isSuccessful()) {
-//                    //cry
-//                } else {
-//                    Log.i(TAG, "Response: " + response.body().string());
-//                }
-//            }
-//        });
-        //////////////////////////////
+        client.newCall(apiRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, "fail");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    Log.i(TAG,"No response");
+                } else {
+                    Log.i(TAG, "Response: coming token  " + response.body().string());
+                }
+            }
+        });
+        ////////////////////////////
         RequestBody requestBody1 = new FormBody.Builder().build();
 
         Request apiRequest2 = new Request.Builder()
                 .addHeader("Authorization", "Bearer " +
                         "AAAAAAAAAAAAAAAAAAAAAPjFuAAAAAAAw4DhWE0PW1fC%2FNu9IqlACrmkceQ%3DAfrebWvQJeZg6ttJrEEMWod9Wa7qGSyTM05dsFzae39UE5W4ZW")
-                .url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
-                //.get(requestBody1)
+                //.url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
+                .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton&count=1")
+                //.post(requestBody1)
                 .build();//
-
+//
         client.newCall(apiRequest2).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -88,10 +92,30 @@ public class MainActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     //cry
                 } else {
-                    Log.i(TAG, "?????????: " + response.body().string());
+                    Log.d("search made","/////////////////////////" );
+                    String stResponse = response.body().string();
+                    Gson gson = new Gson();
+                    TweetsSearch tweetsSearch = gson.fromJson(stResponse, TweetsSearch.class);
+                    int maxLogSize = 1000;
+//                    String veryLongString = stResponse;
+//                    for(int i=0; i<= veryLongString.length()/maxLogSize; i++){
+//                        int start = i * maxLogSize;
+//                        int end = (i+1)*maxLogSize;
+//                        end = end>veryLongString.length()?veryLongString.length():end;
+//                        Log.v("Hey", veryLongString.substring(start,end));
+//                    }
+
+                  Log.d("Hey",  tweetsSearch.getStatuses().get(0).getText());
+
+
+//                    Log.i(TAG, "After sending Tweets: " + stResponse);
+                    //ArrayList<Statuses> asdf = tweetsSearch.getStatuses();
+                    //Log.i("Its gson", gson.toString(tweetsSearch.getStatuses().getClas));
                 }
             }
+
         });
+        //////////////////////////////////////////////////////////
 
 
     }
