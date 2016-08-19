@@ -7,6 +7,11 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.gson.Gson;
 
@@ -23,13 +28,38 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "asdfasf";
+    ListView mlistView;
+    ArrayAdapter mAdapter;
+    ArrayList<String> twitArray = new ArrayList<String>();
+    String searchURL;
+
+    EditText searchTerm;
+    Button buSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        doMyAuthentication();
+        buSearch = (Button) findViewById(R.id.button);
+        searchTerm = (EditText) findViewById(R.id.searchEdit);
+
+        mlistView = (ListView) findViewById(R.id.listView);
+        mAdapter = new ArrayAdapter<>(MainActivity.this
+                , android.R.layout.simple_list_item_1, twitArray);
+        mlistView.setAdapter(mAdapter);
+
+        buSearch.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                String search = searchTerm.getText().toString();
+                searchURL = "https://api.twitter.com/1.1/search/tweets.json?q="+search;
+                Log.d("asdf", searchURL);
+                doMyAuthentication();
+            }
+        });
+
     }
 
     public void doMyAuthentication() {
@@ -76,14 +106,10 @@ public class MainActivity extends AppCompatActivity {
         Request apiRequest2 = new Request.Builder()
                 .addHeader("Authorization", "Bearer " +
                         "AAAAAAAAAAAAAAAAAAAAAPjFuAAAAAAAw4DhWE0PW1fC%2FNu9IqlACrmkceQ%3DAfrebWvQJeZg6ttJrEEMWod9Wa7qGSyTM05dsFzae39UE5W4ZW")
-<<<<<<< HEAD:lab04/MyApplication/app/src/main/java/com/example/ubun17/myapplication/MainActivity.java
                 //.url("https://api.twitter.com//1.1/statuses/user_timeline.json?count=100&screen_name=NYCMayorsOffice")
-                .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton&count=1")
+                //.url("https://api.twitter.com/1.1/search/tweets.json?q=clinton&count=1")
                 //.post(requestBody1)
-=======
-                .url("https://api.twitter.com/1.1/search/tweets.json?q=clinton")
-                //.get(requestBody1)
->>>>>>> d5c8a263ed2710d6355af4e64a7b81617d5b10a7:lab03/MyApplication/app/src/main/java/com/example/ubun17/myapplication/MainActivity.java
+                .url(searchURL)
                 .build();//
 //
         client.newCall(apiRequest2).enqueue(new Callback() {
@@ -101,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                     String stResponse = response.body().string();
                     Gson gson = new Gson();
                     TweetsSearch tweetsSearch = gson.fromJson(stResponse, TweetsSearch.class);
-                    int maxLogSize = 1000;
+ //                   int maxLogSize = 1000;
 //                    String veryLongString = stResponse;
 //                    for(int i=0; i<= veryLongString.length()/maxLogSize; i++){
 //                        int start = i * maxLogSize;
@@ -113,15 +139,29 @@ public class MainActivity extends AppCompatActivity {
                   Log.d("Hey",  tweetsSearch.getStatuses().get(0).getText());
 
 
+                for(int i = 0; i < tweetsSearch.getStatuses().size(); i ++) {
+                    twitArray.add(tweetsSearch.getStatuses().get(i).getText());
+                }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+//                            mlistView = (ListView) findViewById(R.id.listView);
+//                            mAdapter = new ArrayAdapter<>(MainActivity.this
+//                                    , android.R.layout.simple_list_item_1, twitArray);
+//                            mlistView.setAdapter(mAdapter);
+                        }
+                    });
+
 //                    Log.i(TAG, "After sending Tweets: " + stResponse);
                     //ArrayList<Statuses> asdf = tweetsSearch.getStatuses();
                     //Log.i("Its gson", gson.toString(tweetsSearch.getStatuses().getClas));
                 }
             }
 
-        });
+        });//End of new Call
         //////////////////////////////////////////////////////////
-
 
     }
 
